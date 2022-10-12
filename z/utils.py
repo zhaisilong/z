@@ -12,6 +12,7 @@ import logging
 from rich.logging import RichHandler
 from logging import FileHandler
 from typing import Optional
+from sklearn.utils import shuffle
 
 
 def get_logger(name: Optional[str] = None, filename: Optional[str] = None, level: str = 'NOTSET') -> logging.Logger:
@@ -103,10 +104,6 @@ def set_seeds(seed):
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
-
-
-from sklearn.utils import shuffle
-
 
 def show_ratio(df: pd.DataFrame, label='label', sort=None, n=5) -> None:
     """df 的标签中的各类比值

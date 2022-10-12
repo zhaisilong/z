@@ -23,7 +23,7 @@ def version():
 
 
 setup(
-    name="z",
+    name="sci-ztools",
     version=version(),
     url="https://github.com/zhaisilong/z",
     license='MIT',
@@ -31,6 +31,7 @@ setup(
     author_email="zhaisilong@outlook.com",
     description="A Unified Tool Set for Science Researches",
     long_description=read("README.md"),
+    long_description_content_type="text/markdown",
     packages=find_packages(where='.', exclude=('tests',), include=('*')),
     package_data={'z': ['vocab/*']},
     entry_points={
@@ -46,4 +47,5 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.7',
     ],
+    python_requires='>=3.7',  # 对python的最低版本要求
 )
