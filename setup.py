@@ -40,6 +40,16 @@ setup(
         ],
     },
     install_requires=[
+        'biopython',
+        'rich',
+        'jupyter',
+        'ipykernel',
+        'pandas',
+        'scikit-learn',
+        'numpy',
+        'tqdm',
+        'six',
+        'future',
     ],
 
     classifiers=[
