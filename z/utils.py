@@ -6,6 +6,7 @@ from typing import Union, List, Optional, Iterable
 import numpy as np
 import pandas as pd
 import torch
+from rich import console
 from rich.table import Table
 from sklearn.model_selection import KFold  # 交叉验证
 import logging
@@ -98,12 +99,20 @@ def df_to_table(
     return rich_table
 
 
+def print_df(
+        pandas_dataframe: pd.DataFrame,
+        title: str = None,
+):
+    console.Console().print(df_to_table(pandas_dataframe, Table(title=title)))
+
+
 def set_seeds(seed):
     "set random seeds"
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
+
 
 def show_ratio(df: pd.DataFrame, label='label', sort=None, n=5) -> None:
     """df 的标签中的各类比值
