@@ -27,10 +27,12 @@ def get_logger(name: Optional[str] = None, filename: Optional[str] = None, level
         handlers.append(FileHandler(filename))
 
     logging.basicConfig(
-        level=level,
         format='%(name)s: %(message)s',
         handlers=handlers)
-    return logging.getLogger(name)
+    log = logging.getLogger(name)
+    if level:
+        log.setLevel(level)
+    return log
 
 
 log = get_logger()
