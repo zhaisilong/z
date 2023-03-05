@@ -20,9 +20,8 @@ def seq2record(seq_str, idx, description):
     id = str(idx) + '.' + str(description)
     return SeqRecord(Seq(seq_str), id=id)
 def record_iters(seqs, idxs, descriptions):
-    with Progress(SpinnerColumn(), *Progress.get_default_columns(), "Elapsed:", TimeElapsedColumn()) as progress:
-        for seq, idx, description in progress.track(zip(seqs, idxs, descriptions), description='Processing: ', total=len(seqs)):
-            yield seq2record(seq, idx, description)
+    for seq, idx, description in zip(seqs, idxs, descriptions):
+        yield seq2record(seq, idx, description)
 
 pattern = r".*>(\d+)\.\d"
 prog = re.compile(pattern)

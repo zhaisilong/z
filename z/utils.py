@@ -2,13 +2,13 @@ import os
 import random
 from itertools import takewhile, repeat
 from pathlib import Path
-from typing import Union, List, Optional, Iterable
+from typing import Union, List, Optional
 import numpy as np
 import pandas as pd
 import torch
 from rich import console
 from rich.table import Table
-from sklearn.model_selection import KFold  # 交叉验证
+from sklearn.model_selection import KFold  # Kfold cross validation 
 import logging
 from rich.logging import RichHandler
 from logging import FileHandler
@@ -16,8 +16,8 @@ from typing import Optional
 from sklearn.utils import shuffle
 
 
-def get_logger(name: Optional[str] = None, filename: Optional[str] = None, level: str = 'NOTSET') -> logging.Logger:
-    """获取一个 Rich 美化的 Logger"""
+def get_logger(name: Optional[str] = None, filename: Optional[str] = None, level: str = 'INFO') -> logging.Logger:
+    """Get glorified Rich Logger"""
     name = name if name else __name__
 
     handlers = [RichHandler(
@@ -30,8 +30,7 @@ def get_logger(name: Optional[str] = None, filename: Optional[str] = None, level
         format='%(name)s: %(message)s',
         handlers=handlers)
     log = logging.getLogger(name)
-    if level:
-        log.setLevel(level)
+    log.setLevel(level)
     return log
 
 
@@ -39,7 +38,7 @@ log = get_logger()
 
 
 def read_excel(paths: Union[Path, List[Path]], drop_by: Optional[str] = None) -> pd.DataFrame:
-    """读取 excel 保存为 pandas.DataFrame"""
+    """Read excel and get pandas.DataFrame"""
     if isinstance(paths, List):
         # use openpyxl for better excel
         df = pd.concat([pd.read_excel(path, engine='openpyxl') for path in paths])
@@ -47,8 +46,8 @@ def read_excel(paths: Union[Path, List[Path]], drop_by: Optional[str] = None) ->
         df = pd.read_excel(paths, engine='openpyxl')
     else:
         raise NotImplementedError
-    # xlsx 的最后面往往都是空的
-    # drop 保证顺序
+    # remove blank lines in the tail of xlsx 
+    # use drop to make sure the index order
     if drop_by:
         df.dropna(subset=[drop_by], inplace=True)
     df.reset_index(drop=True, inplace=True)
@@ -64,7 +63,7 @@ def get_device():
 
 
 def iter_count(file_name):
-    """获取文本行数"""
+    """Text lines counter"""
     buffer = 1024 * 1024
     with open(file_name) as f:
         buf_gen = takewhile(lambda x: x, (f.read(buffer) for _ in repeat(None)))
@@ -117,7 +116,7 @@ def set_seeds(seed):
 
 
 def show_ratio(df: pd.DataFrame, label='label', sort=None, n=5) -> None:
-    """df 的标签中的各类比值
+    """print the label proportion in pd.DataFrame
         Args:
             sort: 'value' or 'label'
     """
@@ -133,15 +132,15 @@ def show_ratio(df: pd.DataFrame, label='label', sort=None, n=5) -> None:
 
     for i in n_classes.index:
         log.info(
-            f'标签 {n_classes.at[i, "index"]} 比例为: {n_classes.at[i, label] / n_all * 100:.2f}%, 个数为: {n_classes.at[i, label]}')
+            f'Label {n_classes.at[i, "index"]} takes: {n_classes.at[i, label] / n_all * 100:.2f}%, Nums: {n_classes.at[i, label]}')
 
 
 def split_df(df: pd.DataFrame, shuf=True, val=True, random_state=42):
     """Split df into train/val/test set and write into files
-    ratio: 8:1:1
+    ratio: 8:1:1 or 9:1
 
-    Args：
-        - df (DataFrame)： some data
+    Args:
+        - df (DataFrame): some data
         - shuf (bool, default=True): shuffle the DataFrame
         - val (bool, default=True): split into three set, train/val/test
     """
@@ -163,7 +162,7 @@ def split_df(df: pd.DataFrame, shuf=True, val=True, random_state=42):
 
 def kfold(df: pd.DataFrame, n_splits=5, shuffle=True, random_state=42) -> pd.DataFrame:
     """
-    :param df: 输入的索引必须要对,否则会出错
+    :param df: make sure the index correct
     :param n_splits:
     :param shuffle:
     :param random_state:

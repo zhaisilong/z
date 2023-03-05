@@ -40,16 +40,7 @@ setup(
         ],
     },
     install_requires=[
-        'biopython',
-        'rich',
-        'jupyter',
-        'ipykernel',
-        'pandas',
-        'scikit-learn',
-        'numpy',
-        'tqdm',
-        'six',
-        'future',
+        
     ],
 
     classifiers=[
@@ -57,5 +48,5 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.7',
     ],
-    python_requires='>=3.7',  # 对python的最低版本要求
+    python_requires='>=3.7',  # The recommended least version of python
 )
